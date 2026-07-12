@@ -169,3 +169,30 @@ height:210px;
 }
 
 }
+.sidebar{
+    position:fixed;
+    top:0;
+    left:-260px;
+    width:250px;
+    height:100%;
+    background:#1b1b1b;
+    padding:70px 20px;
+    transition:.3s;
+    z-index:9999;
+}
+
+.sidebar.active{
+    left:0;
+}
+
+.sidebar a{
+    display:block;
+    color:#fff;
+    text-decoration:none;
+    padding:15px 0;
+    border-bottom:1px solid #333;
+}
+
+.menu{
+    cursor:pointer;
+}
