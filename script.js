@@ -12,7 +12,6 @@ const toprated = document.getElementById("toprated");
 
 const search = document.getElementById("search");
 
-// Banner
 async function loadBanner(){
 
 const res = await fetch(`${BASE}/movie/popular?api_key=${API_KEY}`);
@@ -24,21 +23,33 @@ const movie = data.results[0];
 banner.style.backgroundImage =
 `url(https://image.tmdb.org/t/p/original${movie.backdrop_path})`;
 
-bannerTitle.innerHTML = movie.title;
+bannerTitle.innerText = movie.title;
 
-bannerOverview.innerHTML = movie.overview;
+bannerOverview.innerText = movie.overview;
 
 }
 
-// Movie Card
+async function getMovies(url,container){
 
-function card(movie){
+const res = await fetch(url);
 
-return `
+const data = await res.json();
+
+showMovies(data.results,container);
+
+}
+
+function showMovies(list,container){
+
+container.innerHTML="";
+
+list.forEach(movie=>{
+
+container.innerHTML += `
 
 <div class="card">
 
-<img src="${IMG}${movie.poster_path}">
+<img src="${IMG+movie.poster_path}">
 
 <div class="info">
 
@@ -46,7 +57,7 @@ return `
 
 <div class="rating">
 
-⭐ ${movie.vote_average}
+⭐ ${movie.vote_average.toFixed(1)}
 
 </div>
 
@@ -56,56 +67,17 @@ return `
 
 `;
 
-}
-
-// Trending
-
-async function loadTrending(){
-
-const res = await fetch(`${BASE}/trending/movie/week?api_key=${API_KEY}`);
-
-const data = await res.json();
-
-trending.innerHTML =
-data.results.map(card).join("");
+});
 
 }
-
-// Popular
-
-async function loadPopular(){
-
-const res = await fetch(`${BASE}/movie/popular?api_key=${API_KEY}`);
-
-const data = await res.json();
-
-popular.innerHTML =
-data.results.map(card).join("");
-
-}
-
-// Top Rated
-
-async function loadTop(){
-
-const res = await fetch(`${BASE}/movie/top_rated?api_key=${API_KEY}`);
-
-const data = await res.json();
-
-toprated.innerHTML =
-data.results.map(card).join("");
-
-}
-
-// Search
 
 search.addEventListener("keyup",async()=>{
 
-const text = search.value;
+const text=search.value.trim();
 
-if(text==""){
+if(text===""){
 
-loadPopular();
+loadData();
 
 return;
 
@@ -117,19 +89,40 @@ const res = await fetch(
 
 );
 
-const data = await res.json();
+const data=await res.json();
 
-popular.innerHTML =
-data.results.map(card).join("");
+showMovies(data.results,popular);
 
 });
 
-// Start
+function loadData(){
 
 loadBanner();
 
-loadTrending();
+getMovies(
 
-loadPopular();
+`${BASE}/trending/movie/week?api_key=${API_KEY}`,
 
-loadTop();
+trending
+
+);
+
+getMovies(
+
+`${BASE}/movie/popular?api_key=${API_KEY}`,
+
+popular
+
+);
+
+getMovies(
+
+`${BASE}/movie/top_rated?api_key=${API_KEY}`,
+
+toprated
+
+);
+
+}
+
+loadData();
