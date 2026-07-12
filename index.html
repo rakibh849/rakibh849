@@ -3,33 +3,119 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>MovieHub</title>
 
 <link rel="stylesheet" href="style.css">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
 </head>
+
 <body>
 
 <header>
 
-<h2>🎬 MovieHub</h2>
+<div class="top">
 
-<div>
+<div class="menu">
+<i class="fa-solid fa-bars"></i>
+</div>
 
-<input id="search" type="text" placeholder="Search Movie...">
+<div class="logo">
+🎬 MovieHub
+</div>
 
-<button id="theme">🌙</button>
+</div>
+
+<div class="search">
+
+<i class="fa-solid fa-magnifying-glass"></i>
+
+<input
+type="text"
+id="search"
+placeholder="Search Movies..."
+>
 
 </div>
 
 </header>
 
-<main id="movies"></main>
+<section id="banner">
+
+<div class="overlay">
+
+<h1 id="bannerTitle">
+Loading...
+</h1>
+
+<p id="bannerOverview"></p>
+
+<button id="watchBtn">
+
+▶ Watch Now
+
+</button>
+
+</div>
+
+</section>
+
+<section>
+
+<div class="title">
+
+🔥 Trending Now
+
+</div>
+
+<div
+class="row"
+id="trending">
+
+</div>
+
+</section>
+
+<section>
+
+<div class="title">
+
+🎬 Popular Movies
+
+</div>
+
+<div
+class="row"
+id="popular">
+
+</div>
+
+</section>
+
+<section>
+
+<div class="title">
+
+⭐ Top Rated
+
+</div>
+
+<div
+class="row"
+id="toprated">
+
+</div>
+
+</section>
 
 <script src="script.js"></script>
 
 </body>
+
 </html>
