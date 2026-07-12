@@ -1,60 +1,135 @@
 const API_KEY = "e38fd18ae008fd25345aa8f0e89503cd";
-const BASE_URL = "https://api.themoviedb.org/3";
-const IMAGE_URL = "https://image.tmdb.org/t/p/w500";
+const BASE = "https://api.themoviedb.org/3";
+const IMG = "https://image.tmdb.org/t/p/w500";
 
-const movies = document.getElementById("movies");
+const banner = document.getElementById("banner");
+const bannerTitle = document.getElementById("bannerTitle");
+const bannerOverview = document.getElementById("bannerOverview");
+
+const trending = document.getElementById("trending");
+const popular = document.getElementById("popular");
+const toprated = document.getElementById("toprated");
+
 const search = document.getElementById("search");
-const themeBtn = document.getElementById("theme");
 
-// জনপ্রিয় মুভি দেখাবে
-async function getPopularMovies() {
-    const res = await fetch(
-        `${BASE_URL}/movie/popular?api_key=${API_KEY}&language=en-US&page=1`
-    );
+// Banner
+async function loadBanner(){
 
-    const data = await res.json();
-    showMovies(data.results);
+const res = await fetch(`${BASE}/movie/popular?api_key=${API_KEY}`);
+
+const data = await res.json();
+
+const movie = data.results[0];
+
+banner.style.backgroundImage =
+`url(https://image.tmdb.org/t/p/original${movie.backdrop_path})`;
+
+bannerTitle.innerHTML = movie.title;
+
+bannerOverview.innerHTML = movie.overview;
+
 }
 
-// মুভিগুলো দেখানোর ফাংশন
-function showMovies(movieList) {
-    movies.innerHTML = "";
+// Movie Card
 
-    movieList.forEach(movie => {
-        movies.innerHTML += `
-        <div class="movie">
-            <img src="${IMAGE_URL + movie.poster_path}" alt="${movie.title}">
-            <div class="info">
-                <h3>${movie.title}</h3>
-                <p class="rating">⭐ ${movie.vote_average}</p>
-            </div>
-        </div>
-        `;
-    });
+function card(movie){
+
+return `
+
+<div class="card">
+
+<img src="${IMG}${movie.poster_path}">
+
+<div class="info">
+
+<h3>${movie.title}</h3>
+
+<div class="rating">
+
+⭐ ${movie.vote_average}
+
+</div>
+
+</div>
+
+</div>
+
+`;
+
 }
 
-// সার্চ
-search.addEventListener("keyup", async () => {
+// Trending
 
-    const text = search.value.trim();
+async function loadTrending(){
 
-    if (text === "") {
-        getPopularMovies();
-        return;
-    }
+const res = await fetch(`${BASE}/trending/movie/week?api_key=${API_KEY}`);
 
-    const res = await fetch(
-        `${BASE_URL}/search/movie?api_key=${API_KEY}&query=${encodeURIComponent(text)}`
-    );
+const data = await res.json();
 
-    const data = await res.json();
-    showMovies(data.results);
+trending.innerHTML =
+data.results.map(card).join("");
+
+}
+
+// Popular
+
+async function loadPopular(){
+
+const res = await fetch(`${BASE}/movie/popular?api_key=${API_KEY}`);
+
+const data = await res.json();
+
+popular.innerHTML =
+data.results.map(card).join("");
+
+}
+
+// Top Rated
+
+async function loadTop(){
+
+const res = await fetch(`${BASE}/movie/top_rated?api_key=${API_KEY}`);
+
+const data = await res.json();
+
+toprated.innerHTML =
+data.results.map(card).join("");
+
+}
+
+// Search
+
+search.addEventListener("keyup",async()=>{
+
+const text = search.value;
+
+if(text==""){
+
+loadPopular();
+
+return;
+
+}
+
+const res = await fetch(
+
+`${BASE}/search/movie?api_key=${API_KEY}&query=${text}`
+
+);
+
+const data = await res.json();
+
+popular.innerHTML =
+data.results.map(card).join("");
+
 });
 
-// ডার্ক মোড
-themeBtn.addEventListener("click", () => {
-    document.body.classList.toggle("light");
-});
+// Start
 
-// শুরুতে জনপ্রিয় মুভি লোড হবে
-getPopularMovies();
+loadBanner();
+
+loadTrending();
+
+loadPopular();
+
+loadTop();
