@@ -132,3 +132,16 @@ const sidebar = document.getElementById("sidebar");
 menu.addEventListener("click", () => {
     sidebar.classList.toggle("active");
 });
+const menu = document.querySelector(".menu");
+const sidebar = document.getElementById("sidebar");
+const overlay = document.getElementById("overlay");
+
+menu.onclick = () => {
+    sidebar.classList.add("active");
+    overlay.classList.add("active");
+};
+
+overlay.onclick = () => {
+    sidebar.classList.remove("active");
+    overlay.classList.remove("active");
+};
